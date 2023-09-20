@@ -10,7 +10,8 @@
     "test": "jest --passWithNoTests --no-cache --runInBand",
     "test:watch": "npm t -- --watch",
     "test:staged": "npm t -- --findRelatedTests",
-    "test:coverage": "npm t -- --coverage"
+    "test:coverage": "npm t -- --coverage",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "Jônatas Alves",
