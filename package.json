@@ -10,9 +10,12 @@
   "author": "Jônatas Alves",
   "license": "ISC",
   "devDependencies": {
+    "@types/module-alias": "^2.0.2",
+    "@types/node": "^20.6.3",
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "module-alias": "^2.2.3",
     "rimraf": "^5.0.1"
   }
 }
