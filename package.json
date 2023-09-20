@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc -p tsconfig-build.json",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix"
   },
   "keywords": [],
   "author": "Jônatas Alves",
@@ -15,6 +17,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "eslint-config-standard-with-typescript": "^39.0.0",
     "module-alias": "^2.2.3",
     "rimraf": "^5.0.1"
   }
