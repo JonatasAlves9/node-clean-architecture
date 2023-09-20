@@ -5,8 +5,10 @@ class FacebookAuthenticationService {
   constructor (private readonly loadFacebookUserApi: LoadFacebookUserApi) {
   }
 
-  async perform (params: FacebookAuthentication.Params): Promise<void> {
+  async perform (params: FacebookAuthentication.Params): Promise<AuthenticationError> {
     await this.loadFacebookUserApi.loadUser({ token: params.token })
+
+    return new AuthenticationError()
   }
 }
 
@@ -54,6 +56,6 @@ describe('FacebookAuthenticationService', () => {
       token: 'any_token'
     })
 
-    expect(authResult).toBe(new AuthenticationError())
+    expect(authResult).toEqual(new AuthenticationError())
   })
 })
