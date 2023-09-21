@@ -1,29 +1,42 @@
 import { AuthenticationError } from '@/domain/errors'
 import { FacebookAuthenticationService } from '@/data/services'
 
-import { mock } from 'jest-mock-extended'
+import { mock, type MockProxy } from 'jest-mock-extended'
 import { type LoadFacebookUserApi } from '@/data/contracts/apis'
+
+interface SubTypes {
+  sut: FacebookAuthenticationService
+  loadFacebookUserApi: MockProxy<LoadFacebookUserApi>
+}
+
+const makeSut = (): SubTypes => {
+  const loadFacebookUserApi = mock<LoadFacebookUserApi>()
+  const sut = new FacebookAuthenticationService(loadFacebookUserApi)
+
+  return {
+    sut,
+    loadFacebookUserApi
+  }
+}
 
 describe('FacebookAuthenticationService', () => {
   it('should call LoadFacebookUserApi with correct params', async () => {
-    const facebookApi = mock<LoadFacebookUserApi>()
-    const sut = new FacebookAuthenticationService(facebookApi)
+    const { sut, loadFacebookUserApi } = makeSut()
 
     await sut.perform({
       token: 'any_token'
     })
 
-    expect(facebookApi.loadUser).toHaveBeenCalledWith({
+    expect(loadFacebookUserApi.loadUser).toHaveBeenCalledWith({
       token: 'any_token'
     })
-    expect(facebookApi.loadUser).toHaveBeenCalledTimes(1)
+    expect(loadFacebookUserApi.loadUser).toHaveBeenCalledTimes(1)
   })
 
   it('should return AuthenticationError when LoadFacebookUserApi returns undefined', async () => {
-    const facebookApi = mock<LoadFacebookUserApi>()
+    const { sut, loadFacebookUserApi } = makeSut()
 
-    facebookApi.loadUser.mockResolvedValue(undefined)
-    const sut = new FacebookAuthenticationService(facebookApi)
+    loadFacebookUserApi.loadUser.mockResolvedValue(undefined)
 
     const authResult = await sut.perform({
       token: 'any_token'
