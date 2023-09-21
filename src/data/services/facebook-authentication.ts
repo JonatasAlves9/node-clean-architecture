@@ -18,10 +18,10 @@ export class FacebookAuthenticationService {
     if (fbData !== undefined) {
       const accountData = await this.userAccountRepo.perform({ email: fbData.email })
 
-      if (accountData?.name !== undefined) {
+      if (accountData !== undefined) {
         await this.userAccountRepo.updateWithFacebook({
           facebookId: fbData.facebookId,
-          name: accountData.name,
+          name: accountData.name ?? fbData.name,
           id: accountData.id
         })
       } else {
