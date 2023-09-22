@@ -7,5 +7,4 @@ export namespace HttpGetClient {
     url: string
     params: object
   }
-
 }
