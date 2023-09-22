@@ -5,7 +5,8 @@ module.exports = {
       files: ['*.js', '*.jsx', '*.ts', '*.tsx'],
       extends: 'standard-with-typescript',
       rules: {
-        "@typescript-eslint/no-namespace": "off"
+        "@typescript-eslint/no-namespace": "off",
+        "@typescript-eslint/return-await": "off"
       },
     },
   ],
