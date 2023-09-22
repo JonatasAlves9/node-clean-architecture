@@ -22,24 +22,29 @@ describe('FacebookAuthenticationService', () => {
 
   let token: string
 
-  beforeEach(() => {
+  // Perform tests
+  beforeAll(() => {
     facebookApi = mock()
     facebookApi.loadUser.mockResolvedValue({
       name: 'any_fb_name',
       email: 'any_fb_email',
       facebookId: 'any_fb_id'
     })
-    userAccountRepo = mock()
-    crypto = mock()
-    crypto.generateToken.mockResolvedValue('any_generated_value')
 
+    userAccountRepo = mock()
     userAccountRepo.perform.mockResolvedValue(undefined)
     userAccountRepo.saveWithFacebook.mockResolvedValue({
       id: 'any_account_id'
     })
 
+    crypto = mock()
+    crypto.generateToken.mockResolvedValue('any_generated_value')
+  })
+
+  beforeEach(() => {
     sut = new FacebookAuthenticationService(facebookApi, userAccountRepo, crypto)
   })
+
   it('should call LoadFacebookUserApi with correct params', async () => {
     await sut.perform({
       token
@@ -98,7 +103,7 @@ describe('FacebookAuthenticationService', () => {
   })
 
   it('should rethrow if LoadFacebookUserApi throws', async () => {
-    facebookApi.loadUser.mockRejectedValue(new Error('fb_error'))
+    facebookApi.loadUser.mockRejectedValueOnce(new Error('fb_error'))
 
     const promise = sut.perform({ token })
 
@@ -106,7 +111,7 @@ describe('FacebookAuthenticationService', () => {
   })
 
   it('should rethrow if SaveWithFacebookError throws', async () => {
-    userAccountRepo.saveWithFacebook.mockRejectedValue(new Error('save_with_facebook_error'))
+    userAccountRepo.saveWithFacebook.mockRejectedValueOnce(new Error('save_with_facebook_error'))
 
     const promise = sut.perform({ token })
 
@@ -114,7 +119,7 @@ describe('FacebookAuthenticationService', () => {
   })
 
   it('should rethrow if SaveWithFacebookError throws', async () => {
-    userAccountRepo.saveWithFacebook.mockRejectedValue(new Error('save_with_facebook_error'))
+    userAccountRepo.saveWithFacebook.mockRejectedValueOnce(new Error('save_with_facebook_error'))
 
     const promise = sut.perform({ token })
 
@@ -122,7 +127,7 @@ describe('FacebookAuthenticationService', () => {
   })
 
   it('should rethrow if PerformUserAccount throws', async () => {
-    userAccountRepo.perform.mockRejectedValue(new Error('perform_account'))
+    userAccountRepo.perform.mockRejectedValueOnce(new Error('perform_account'))
 
     const promise = sut.perform({ token })
 
