@@ -24,6 +24,7 @@ describe('FacebookAuthenticationService', () => {
 
   // Perform tests
   beforeAll(() => {
+    token = 'any_token'
     facebookApi = mock()
     facebookApi.loadUser.mockResolvedValue({
       name: 'any_fb_name',
