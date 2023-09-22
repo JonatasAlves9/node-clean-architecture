@@ -1,5 +1,5 @@
 import { type TokenGenerator } from '@/data/contracts/crypto'
-import jwt from 'jsonwebtoken'
+import { sign } from 'jsonwebtoken'
 
 export class JwtTokenGenerator {
   constructor (private readonly secret: string) {
@@ -7,7 +7,7 @@ export class JwtTokenGenerator {
 
   async generateToken (params: TokenGenerator.Params): Promise<TokenGenerator.Result> {
     const expirationInSeconds = params.expirationInMs / 1000
-    return jwt.sign({ key: params.key }, this.secret, {
+    return sign({ key: params.key }, this.secret, {
       expiresIn: expirationInSeconds
     })
   }
