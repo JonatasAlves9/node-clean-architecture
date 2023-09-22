@@ -5,9 +5,9 @@ export class JwtTokenGenerator {
   constructor (private readonly secret: string) {
   }
 
-  async generateToken (params: TokenGenerator.Params): Promise<void> {
+  async generateToken (params: TokenGenerator.Params): Promise<TokenGenerator.Result> {
     const expirationInSeconds = params.expirationInMs / 1000
-    jwt.sign({ key: params.key }, this.secret, {
+    return jwt.sign({ key: params.key }, this.secret, {
       expiresIn: expirationInSeconds
     })
   }
