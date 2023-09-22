@@ -52,14 +52,15 @@ describe('PgUserAccountRepository', () => {
   })
 
   describe('load', () => {
-    it('should return an account if email exists', async () => {
+    beforeAll(async () => {
       const connection = await db.adapters.createTypeormDataSource({
         type: 'postgres',
         entities: [PgUser]
       })
       await connection.initialize()
       await connection.synchronize()
-
+    })
+    it('should return an account if email exists', async () => {
       const pgUserRepo = PgUser.getRepository()
       await pgUserRepo.save({ email: 'existing_email' })
       const sut = new PgUserAccountRepository()
@@ -71,6 +72,16 @@ describe('PgUserAccountRepository', () => {
       expect(account).toEqual({
         id: '1'
       })
+    })
+
+    it('should return an account if not email exists', async () => {
+      const sut = new PgUserAccountRepository()
+
+      const account = await sut.perform({
+        email: 'new_email'
+      })
+
+      expect(account).toBeUndefined()
     })
   })
 })
