@@ -1,4 +1,4 @@
-import { type LoadUserAccountRepository } from '@/data/contracts/repos'
+import { type LoadUserAccountRepository, type SaveFacebookAccountRepository } from '@/data/contracts/repos'
 import { PgUser } from '@/infra/postgres/entities'
 
 export class PgUserAccountRepository implements LoadUserAccountRepository {
@@ -15,5 +15,15 @@ export class PgUserAccountRepository implements LoadUserAccountRepository {
         name: pgUser.name ?? undefined
       }
     }
+  }
+
+  async saveWithFacebook (params: SaveFacebookAccountRepository.Params): Promise<void> {
+    const pgUserRepo = PgUser.getRepository()
+
+    await pgUserRepo.save({
+      email: params.email,
+      name: params.name,
+      facebookId: params.facebookId
+    })
   }
 }

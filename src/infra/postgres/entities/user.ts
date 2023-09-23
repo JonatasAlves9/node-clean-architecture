@@ -14,5 +14,5 @@ export class PgUser extends BaseEntity {
     email!: string
 
   @Column({ name: 'id_facebook', nullable: true })
-    facebookId?: number
+    facebookId?: string
 }
