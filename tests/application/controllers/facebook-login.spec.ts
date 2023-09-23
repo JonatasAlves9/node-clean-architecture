@@ -1,6 +1,7 @@
 import { type FacebookAuthentication } from '@/domain/features'
 import { mock, type MockProxy } from 'jest-mock-extended'
 import { AuthenticationError } from '@/domain/errors'
+import { AccessToken } from '@/domain/models'
 
 export class FacebookLoginController {
   constructor (private readonly facebookAuthentication: FacebookAuthentication) {
@@ -17,9 +18,18 @@ export class FacebookLoginController {
       token: httpRequest.token
     })
 
-    return {
-      statusCode: 401,
-      data: result
+    if (result instanceof AccessToken) {
+      return {
+        statusCode: 200,
+        data: {
+          accessToken: result.value
+        }
+      }
+    } else {
+      return {
+        statusCode: 401,
+        data: result
+      }
     }
   }
 }
@@ -35,6 +45,7 @@ describe('FacebookLogin', () => {
 
   beforeAll(() => {
     facebookAuthentication = mock()
+    facebookAuthentication.perform.mockResolvedValue(new AccessToken('any_value'))
   })
 
   beforeEach(() => {
@@ -82,6 +93,19 @@ describe('FacebookLogin', () => {
     expect(httpResponse).toEqual({
       statusCode: 401,
       data: new AuthenticationError()
+    })
+  })
+
+  it('should return 200 if authentication succeeds', async () => {
+    const httpResponse = await sut.handle({
+      token: 'any_token'
+    })
+
+    expect(httpResponse).toEqual({
+      statusCode: 200,
+      data: {
+        accessToken: 'any_value'
+      }
     })
   })
 })
