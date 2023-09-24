@@ -3,9 +3,9 @@ import { mock, type MockProxy } from 'jest-mock-extended'
 import { AuthenticationError } from '@/domain/errors'
 import { AccessToken } from '@/domain/models'
 import { FacebookLoginController } from '@/application/controllers'
-import { RequiredFieldError, ServerError, UnauthorizedError } from '@/application/errors'
-import mocked = jest.mocked
+import { ServerError, UnauthorizedError } from '@/application/errors'
 import { RequiredStringValidator } from '@/application/validation'
+import mocked = jest.mocked
 
 jest.mock('@/application/validation/required-string')
 
